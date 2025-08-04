@@ -8,24 +8,30 @@ This repository serves as a central hub for all materials, notes, and resources 
 
 ## Course Content
 
-### Class 1: Introduction to SQL and Basic Commands
+### Class 1: PostgreSQL Installation with Docker
 
-The first class covers fundamental SQL concepts and basic commands for database interaction using PostgreSQL.
+The first class focuses on setting up a PostgreSQL development environment using Docker and Docker Compose.
 
 **Topics covered:**
-- SQL syntax fundamentals
-- Basic SQL commands (SELECT, INSERT, UPDATE, DELETE)
-- Database connection and management
-- Working with PostgreSQL
+- Running PostgreSQL using Docker commands
+- Creating and configuring Docker Compose files
+- Testing database connectivity
+- Data persistence with Docker volumes
+- Understanding Docker image versions
 
 **Resources available:**
-- `README.md`: Detailed explanation of SQL basics and command structure
-- `cheatsheet.md`: Quick reference guide for SQL commands including:
-  - DDL (Data Definition Language) commands
-  - DML (Data Manipulation Language) commands
-  - DCL (Data Control Language) commands
-  - TCL (Transaction Control Language) commands
-  - PostgreSQL specific commands and features
+- `README.md`: Step-by-step guide for PostgreSQL deployment with Docker including:
+  - Running PostgreSQL with docker run command
+  - Setting up Docker Compose configuration
+  - Testing database connections
+  - Configuring volumes for data persistence
+  - Best practices for version management
+- `cheatsheet.md`: Docker and Docker Compose command reference including:
+  - Container management commands
+  - Image management
+  - Docker Compose operations
+  - PostgreSQL-specific Docker commands
+  - Troubleshooting tips
 
 ## Repository Structure
 
