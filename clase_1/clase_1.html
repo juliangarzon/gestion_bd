@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introducción a Bases de Datos e Infraestructura</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .slide {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 60px;
+            margin: 40px 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            border-radius: 20px 20px 0 0;
+        }
+
+        /* Title Slide */
+        .title-slide {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .title-slide h1 {
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .title-slide h2 {
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .title-slide .author {
+            font-size: 1.3rem;
+            opacity: 0.8;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        /* Slide Headers */
+        h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #34495e;
+            margin: 30px 0 20px 0;
+        }
+
+        /* Profile Section */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .profile-card {
+            background: linear-gradient(135deg, #f6f9fc 0%, #e9ecef 100%);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.2);
+        }
+
+        .profile-card h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Learning Objectives */
+        .objectives-list {
+            display: grid;
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .objective-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            border-left: 4px solid #28a745;
+            transition: all 0.3s ease;
+        }
+
+        .objective-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.1);
+        }
+
+        .check-icon {
+            width: 24px;
+            height: 24px;
+            background: #28a745;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Course Structure */
+        .course-structure {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 40px 0;
+        }
+
+        .structure-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .structure-card h3 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .structure-card ul {
+            list-style: none;
+            text-align: left;
+        }
+
+        .structure-card li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .structure-card li:last-child {
+            border-bottom: none;
+        }
+
+        /* Project Section */
+        .project-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: scale(1.05);
+        }
+
+        /* Database Diagram */
+        .database-diagram {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin: 60px 0;
+            text-align: center;
+        }
+
+        .diagram-element {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .diagram-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .diagram-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .diagram-desc {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Users Section */
+        .users-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin: 60px 0;
+        }
+
+        .user-card {
+            text-align: center;
+            padding: 40px 20px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .user-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .user-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .user-card:nth-child(1) .user-icon {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+        }
+
+        .user-card:nth-child(2) .user-icon {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+        }
+
+        .user-card:nth-child(3) .user-icon {
+            background: linear-gradient(135deg, #fd79a8 0%, #fdcb6e 100%);
+        }
+
+        .user-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .user-desc {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Abstraction Levels */
+        .abstraction-levels {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin: 50px 0;
+        }
+
+        .level-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .level-card:hover {
+            transform: scale(1.05);
+        }
+
+        .level-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .level-card:nth-child(1)::before {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .level-card:nth-child(2)::before {
+            background: linear-gradient(90deg, #f093fb, #f5576c);
+        }
+
+        .level-card:nth-child(3)::before {
+            background: linear-gradient(90deg, #a8edea, #fed6e3);
+        }
+
+        .level-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .level-subtitle {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        /* Database Types */
+        .db-types-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin: 60px 0;
+        }
+
+        .db-type-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .db-type-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .db-type-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+        }
+
+        .db-type-card:nth-child(1)::before {
+            background: linear-gradient(90deg, #4285f4, #34a853);
+        }
+
+        .db-type-card:nth-child(2)::before {
+            background: linear-gradient(90deg, #ea4335, #fbbc05);
+        }
+
+        .db-type-card:nth-child(3)::before {
+            background: linear-gradient(90deg, #34a853, #4285f4);
+        }
+
+        .db-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .db-type-card:nth-child(1) .db-icon {
+            background: linear-gradient(135deg, #4285f4, #34a853);
+        }
+
+        .db-type-card:nth-child(2) .db-icon {
+            background: linear-gradient(135deg, #ea4335, #fbbc05);
+        }
+
+        .db-type-card:nth-child(3) .db-icon {
+            background: linear-gradient(135deg, #34a853, #4285f4);
+        }
+
+        .db-type-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .db-type-desc {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .db-type-examples {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        /* Docker Section */
+        .docker-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin: 60px 0;
+            align-items: center;
+        }
+
+        .traditional-system, .docker-container {
+            text-align: center;
+            padding: 40px;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .traditional-system {
+            background: linear-gradient(135deg, #ddd6fe 0%, #c7d2fe 100%);
+        }
+
+        .docker-container {
+            background: linear-gradient(135deg, #fed7aa 0%, #fde68a 100%);
+            border: 3px solid #f59e0b;
+        }
+
+        .system-icon {
+            font-size: 5rem;
+            margin-bottom: 30px;
+        }
+
+        .arrow {
+            position: absolute;
+            top: 50%;
+            right: -30px;
+            font-size: 3rem;
+            color: #666;
+        }
+
+        /* Performance Table */
+        .performance-table {
+            margin: 40px 0;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            border-bottom: 1px solid #eee;
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .table-cell {
+            padding: 20px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .table-cell:first-child {
+            background: #f8f9fa;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .performance-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+
+        .excellent { color: #28a745; }
+        .moderate { color: #ffc107; }
+        .limited { color: #dc3545; }
+
+        /* Kahoot Section */
+        .kahoot-section {
+            text-align: center;
+            background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+            color: white;
+            padding: 80px 40px;
+            border-radius: 25px;
+            margin: 60px 0;
+        }
+
+        .kahoot-title {
+            font-size: 3rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .kahoot-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .kahoot-info {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            display: inline-block;
+            font-size: 1.2rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .nav-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px;
+                margin: 20px 0;
+            }
+            
+            .title-slide h1 {
+                font-size: 2.5rem;
+            }
+            
+            .profile-grid,
+            .course-structure,
+            .db-types-grid,
+            .users-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .database-diagram,
+            .abstraction-levels {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="previousSlide()">◀ Anterior</button>
+        <button class="nav-btn" onclick="nextSlide()">Siguiente ▶</button>
+    </div>
+
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide title-slide">
+            <h1>Introducción a Bases de Datos e Infraestructura</h1>
+            <h2>Curso de Gestión de Bases de Datos</h2>
+            <div class="author">Julian Eduardo Garzon Giraldo, MsC</div>
+        </div>
+
+        <!-- Slide 2: About the Professor -->
+        <div class="slide">
+            <h1>¿Quiénes estaremos este semestre?</h1>
+            <div class="profile-grid">
+                <div class="profile-card">
+                    <h3>👨‍👩‍👧‍👦 Vida Personal</h3>
+                    <ul>
+                        <li>✓ Casado</li>
+                        <li>✓ Padre de 2 hijos</li>
+                        <li>✓ 7 gatos 🐱</li>
+                    </ul>
+                </div>
+                <div class="profile-card">
+                    <h3>🎓 Formación</h3>
+                    <ul>
+                        <li>✓ Ingeniero de Sistemas</li>
+                        <li>✓ Máster en Gestión de Informática y Telecomunicaciones</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="profile-card" style="margin-top: 20px;">
+                <h3>💼 Experiencia</h3>
+                <ul>
+                    <li>✓ 18 años trabajando en el sector de tecnología</li>
+                    <li>✓ Desarrollo de software, arquitectura, Datos, Agile Coach</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 3: Learning Objectives -->
+        <div class="slide">
+            <h1>¿Qué aprenderás en este curso?</h1>
+            <div class="objectives-list">
+                <div class="objective-item">
+                    <div class="check-icon">✓</div>
+                    <div>Identificar los distintos tipos de bases de datos y sus usos (OLTP, OLAP, NoSQL)</div>
+                </div>
+                <div class="objective-item">
+                    <div class="check-icon">✓</div>
+                    <div>Comprender los roles, responsabilidades y niveles de abstracción en un SGBD</div>
+                </div>
+                <div class="objective-item">
+                    <div class="check-icon">✓</div>
+                    <div>Administrar usuarios, permisos y políticas de acceso</div>
+                </div>
+                <div class="objective-item">
+                    <div class="check-icon">✓</div>
+                    <div>Ejecutar operaciones clave de respaldo, recuperación y mantenimiento</div>
+                </div>
+                <div class="objective-item">
+                    <div class="check-icon">✓</div>
+                    <div>Configurar y desplegar motores de base de datos usando Docker</div>
+                </div>
+                <div class="objective-item">
+                    <div class="check-icon">✓</div>
+                    <div>Automatizar tareas con funciones, triggers y procedimientos</div>
+                </div>
+                <div class="objective-item">
+                    <div class="check-icon">✓</div>
+                    <div>Evaluar el rendimiento y aplicar buenas prácticas de seguridad</div>
+                </div>
+                <div class="objective-item">
+                    <div class="check-icon">✓</div>
+                    <div>Desarrollar un proyecto práctico en equipo que refleje escenarios reales</div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 30px; font-style: italic; color: #666;">
+                📚 Referencias: Fundamentos de Bases de Datos – Silberschatz • Fundamentos de SQL – Oppel & Sheldon • Documentación oficial de PostgreSQL
+            </div>
+        </div>
+
+        <!-- Slide 4: Course Structure -->
+        <div class="slide">
+            <h1>¿Cómo está organizado el curso?</h1>
+            <div class="course-structure">
+                <div class="structure-card">
+                    <h3>📅 Duración y formato</h3>
+                    <ul>
+                        <li>16 semanas</li>
+                        <li>3h clase + 3h trabajo independiente</li>
+                        <li>Modalidad: práctica intensiva</li>
+                    </ul>
+                </div>
+                <div class="structure-card">
+                    <h3>📋 Evaluación</h3>
+                    <ul>
+                        <li>Semana 5: Entrega 1 del proyecto</li>
+                        <li>Semana 10: Entrega 2</li>
+                        <li>Semana 15: Entrega final</li>
+                        <li>Semana 16: Retroalimentación y cierre</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Project Challenge -->
+        <div class="slide">
+            <h1>Tu reto: gestionar una base de datos real</h1>
+            <div class="project-features">
+                <div class="feature-card">
+                    <h3>👥 Equipo</h3>
+                    <p>2 a 3 personas</p>
+                </div>
+                <div class="feature-card">
+                    <h3>💡 Ideas base</h3>
+                    <p>Sistema modular</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📈 Evolución</h3>
+                    <p>Semana a semana</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📋 Documentación</h3>
+                    <p>Justificación en README</p>
+                </div>
+            </div>
+            <div style="margin-top: 40px;">
+                <h2>Opciones de sistema:</h2>
+                <ul style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; list-style: none; margin-top: 20px;">
+                    <li style="padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea;">🛒 Tienda en línea</li>
+                    <li style="padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea;">🎓 Plataforma educativa</li>
+                    <li style="padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea;">📅 Sistema de reservas</li>
+                    <li style="padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea;">💼 CRM básico</li>
+                </ul>
+                <div style="margin-top: 30px; text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 15px;">
+                    <strong>Entregables:</strong><br>
+                    Instalación y despliegue • Gestión de usuarios • Automatización • Seguridad y respaldo • Optimización • Integración
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: What we'll do today -->
+        <div class="slide">
+            <h1>¿Qué haremos hoy?</h1>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px;">
+                <div>
+                    <h2>Hoy aprenderás a:</h2>
+                    <div style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); color: white; padding: 30px; border-radius: 15px; margin-top: 20px;">
+                        <ul style="list-style: none;">
+                            <li style="padding: 8px 0;">• Diferenciar entre los distintos tipos de bases de datos (OLTP, OLAP, NoSQL)</li>
+                            <li style="padding: 8px 0;">• Identificar los tipos de usuarios y niveles de abstracción en un SGBD</li>
+                            <li style="padding: 8px 0;">• Entender la utilidad de Docker para desplegar BD</li>
+                            <li style="padding: 8px 0;">• Crear tu primera base de datos en PostgreSQL usando Docker</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <h2>Actividades prácticas:</h2>
+                    <div style="background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%); color: white; padding: 30px; border-radius: 15px; margin-top: 20px;">
+                        <ul style="list-style: none;">
+                            <li style="padding: 8px 0;">• Clasificación de casos reales por tipo de BD</li>
+                            <li style="padding: 8px 0;">• Instalación de PostgreSQL con Docker</li>
+                            <li style="padding: 8px 0;">• Conexión al contenedor y comandos básicos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: What is a Database -->
+        <div class="slide">
+            <h1>¿Qué es una base de datos?</h1>
+            <div class="database-diagram">
+                <div class="diagram-element">
+                    <div class="diagram-icon">🗂️</div>
+                    <div class="diagram-title">Datos estructurados</div>
+                    <div class="diagram-desc">Información organizada en tablas, documentos o estructuras</div>
+                </div>
+                <div class="diagram-element">
+                    <div class="diagram-icon">🖥️</div>
+                    <div class="diagram-title">Administrados por un SGBD</div>
+                    <div class="diagram-desc">Sistema que gestiona el acceso, seguridad e integridad</div>
+                </div>
+                <div class="diagram-element">
+                    <div class="diagram-icon">⚙️</div>
+                    <div class="diagram-title">Operaciones sobre los datos</div>
+                    <div class="diagram-desc">Crear, leer, actualizar, eliminar y consultar</div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 40px; background: #f8f9fa; padding: 30px; border-radius: 15px; border-left: 5px solid #667eea;">
+                <p style="font-size: 1.2rem; color: #666;">
+                    Una base de datos es un sistema organizado que permite almacenar, acceder, modificar y proteger grandes volúmenes de información de forma eficiente.
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Who uses databases -->
+        <div class="slide">
+            <h1>¿Quiénes usan una base de datos?</h1>
+            <div class="users-grid">
+                <div class="user-card">
+                    <div class="user-icon">👤</div>
+                    <div class="user-title">Usuarios finales</div>
+                    <div class="user-desc">Interactúan con la base a través de aplicaciones</div>
+                </div>
+                <div class="user-card">
+                    <div class="user-icon">👨‍💻</div>
+                    <div class="user-title">Desarrolladores / programadores de aplicaciones</div>
+                    <div class="user-desc">Diseñan y crean software que interactúa con la base</div>
+                </div>
+                <div class="user-card">
+                    <div class="user-icon">🔧</div>
+                    <div class="user-title">Administrador de base de datos</div>
+                    <div class="user-desc">Controla el acceso, la seguridad y el rendimiento</div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 40px;">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 15px; display: inline-block; font-size: 3rem;">
+                    🗃️ Base de datos
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Abstraction Levels -->
+        <div class="slide">
+            <h1>Niveles de abstracción en una base de datos</h1>
+            <div class="abstraction-levels">
+                <div class="level-card">
+                    <div class="level-title">Nivel interno</div>
+                    <div class="level-subtitle">(almacenamiento físico)</div>
+                    <div class="level-desc">
+                        <p>Cómo se guardan los datos: índices, bloques, páginas</p>
+                        <p style="margin-top: 15px; font-style: italic; color: #666;">
+                            Ejemplo: /var/lib/postgresql/ /data/base/...
+                        </p>
+                    </div>
+                </div>
+                <div class="level-card">
+                    <div class="level-title">Nivel conceptual</div>
+                    <div class="level-subtitle">(modelo lógico)</div>
+                    <div class="level-desc">
+                        <p>Definición completa de la base de datos</p>
+                        <p style="margin-top: 15px; font-style: italic; color: #666;">
+                            Ejemplo: Tabla clientes(id, nombre, saldo)
+                        </p>
+                    </div>
+                </div>
+                <div class="level-card">
+                    <div class="level-title">Nivel externo</div>
+                    <div class="level-subtitle">Lo que ven los usuarios finales</div>
+                    <div class="level-desc">
+                        <p>Vistas específicas para cada usuario</p>
+                        <p style="margin-top: 15px; font-style: italic; color: #666;">
+                            Ejemplo: SELECT nombre FROM clientes_vip
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: How a database looks from outside -->
+        <div class="slide">
+            <h1>¿Cómo se ve una base de datos desde afuera?</h1>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 30px; margin: 60px 0;">
+                <div style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); padding: 30px 60px; border-radius: 20px; text-align: center;">
+                    <div style="font-size: 2.5rem; margin-bottom: 15px;">💻</div>
+                    <h3>Aplicaciones / usuarios finales</h3>
+                    <p>clientes web, móviles, etc.</p>
+                </div>
+                
+                <div style="font-size: 3rem; color: #667eea;">↓</div>
+                
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px 60px; border-radius: 20px; text-align: center;">
+                    <div style="font-size: 2.5rem; margin-bottom: 15px;">🗄️</div>
+                    <h3>Sistema Gestor de Bases de Datos (SGBD)</h3>
+                    <p>maneja accesos, seguridad, integridad, concurrencia, recibe instrucciones SQL</p>
+                </div>
+                
+                <div style="font-size: 3rem; color: #667eea;">↓</div>
+                
+                <div style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%); color: white; padding: 30px 60px; border-radius: 20px; text-align: center;">
+                    <div style="font-size: 2.5rem; margin-bottom: 15px;">💽</div>
+                    <h3>Motor de almacenamiento</h3>
+                    <p>escribe y lee en disco, administra índices, bloques, páginas, archivos binarios</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Types of Databases -->
+        <div class="slide">
+            <h1>Tipos de Bases de Datos</h1>
+            <div class="db-types-grid">
+                <div class="db-type-card">
+                    <div class="db-icon">🗃️</div>
+                    <div class="db-type-title">Bases de datos transaccionales (OLTP)</div>
+                    <div class="db-type-desc">
+                        • Optimizadas para escritura y muchas operaciones pequeñas<br>
+                        • Uso típico: tiendas en línea, sistemas bancarios
+                    </div>
+                    <div class="db-type-examples">
+                        <strong>Motores:</strong> PostgreSQL, MySQL, Oracle
+                    </div>
+                </div>
+                <div class="db-type-card">
+                    <div class="db-icon">📊</div>
+                    <div class="db-type-title">Bases de datos analíticas (OLAP)</div>
+                    <div class="db-type-desc">
+                        • Optimizadas para lectura masiva y agregaciones<br>
+                        • Uso típico: dashboards, BI, informes históricos
+                    </div>
+                    <div class="db-type-examples">
+                        <strong>Motores:</strong> Redshift, Snowflake, BigQuery
+                    </div>
+                </div>
+                <div class="db-type-card">
+                    <div class="db-icon">🔧</div>
+                    <div class="db-type-title">Bases de datos NoSQL</div>
+                    <div class="db-type-desc">
+                        • Pensadas para datos no estructurados o esquemas flexibles<br>
+                        • Documentales, Clave-valor, Grafos, Time-series
+                    </div>
+                    <div class="db-type-examples">
+                        <strong>Ejemplos:</strong> MongoDB, Redis, Neo4j, InfluxDB
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Database Performance Comparison -->
+        <div class="slide">
+            <h1>Tipos de Bases de Datos</h1>
+            <div class="performance-table">
+                <div class="table-header">Comparación de Rendimiento</div>
+                <div class="table-row">
+                    <div class="table-cell"><strong>Característica</strong></div>
+                    <div class="table-cell" style="background: #e3f2fd; font-weight: bold;">OLTP<br><small>TRANSACCIONES</small></div>
+                    <div class="table-cell" style="background: #fff3e0; font-weight: bold;">OLAP<br><small>ANÁLISIS</small></div>
+                    <div class="table-cell" style="background: #e8f5e8; font-weight: bold;">NoSQL<br><small>FLEXIBILIDAD</small></div>
+                </div>
+                <div class="table-row">
+                    <div class="table-cell">Esquema fijo</div>
+                    <div class="table-cell"><span class="performance-icon excellent">✅</span></div>
+                    <div class="table-cell"><span class="performance-icon excellent">✅</span></div>
+                    <div class="table-cell"><span class="performance-icon limited">⚠️ ❌</span></div>
+                </div>
+                <div class="table-row">
+                    <div class="table-cell">Lectura masiva</div>
+                    <div class="table-cell"><span class="performance-icon moderate">⚠️</span></div>
+                    <div class="table-cell"><span class="performance-icon excellent">✅✅✅</span></div>
+                    <div class="table-cell"><span class="performance-icon excellent">✅</span></div>
+                </div>
+                <div class="table-row">
+                    <div class="table-cell">Escritura intensiva</div>
+                    <div class="table-cell"><span class="performance-icon excellent">✅✅✅</span></div>
+                    <div class="table-cell"><span class="performance-icon moderate">⚠️</span></div>
+                    <div class="table-cell"><span class="performance-icon excellent">✅</span></div>
+                </div>
+            </div>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-top: 30px; text-align: center;">
+                <h3>Leyenda de Rendimiento</h3>
+                <div style="display: flex; justify-content: center; gap: 40px; margin-top: 15px; flex-wrap: wrap;">
+                    <span><span class="performance-icon excellent">✅</span> Excelente</span>
+                    <span><span class="performance-icon moderate">⚠️</span> Moderado</span>
+                    <span><span class="performance-icon limited">❌</span> Limitado</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Kahoot Practice -->
+        <div class="slide">
+            <div class="kahoot-section">
+                <div class="kahoot-title">Vamos a practicar</div>
+                <div class="kahoot-subtitle">¡Es hora de poner a prueba lo que hemos aprendido!</div>
+                <div class="kahoot-info">
+                    <div style="font-size: 2rem; margin-bottom: 15px;">📱</div>
+                    <div><strong>www.kahoot.it</strong></div>
+                    <div>App Kahoot</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: What is Docker -->
+        <div class="slide">
+            <h1>¿Qué es Docker?</h1>
+            <div style="text-align: center; margin: 40px 0; background: #f8f9fa; padding: 30px; border-radius: 15px;">
+                <p style="font-size: 1.2rem; color: #666; max-width: 800px; margin: 0 auto;">
+                    Docker es una herramienta que permite crear, ejecutar y compartir contenedores: entornos ligeros, portables y aislados que incluyen todo lo necesario para ejecutar una aplicación o servicio.
+                </p>
+            </div>
+            
+            <div class="docker-comparison">
+                <div class="traditional-system">
+                    <div class="system-icon">🖥️</div>
+                    <h3>Sistema tradicional</h3>
+                    <p style="margin-top: 15px;">Instalación directa en el sistema</p>
+                    <div class="arrow">→</div>
+                </div>
+                <div class="docker-container">
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div style="background: #3b82f6; color: white; padding: 15px; border-radius: 8px;">App</div>
+                        <div style="background: #6366f1; color: white; padding: 15px; border-radius: 8px;">Dependencias</div>
+                        <div style="background: #1e40af; color: white; padding: 15px; border-radius: 8px;">Configuración</div>
+                    </div>
+                    <h3 style="margin-top: 20px;">Contenedor</h3>
+                </div>
+            </div>
+            
+            <div style="margin-top: 40px;">
+                <h2 style="color: #2c3e50;">¿Por qué es útil?</h2>
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 15px; margin-top: 20px;">
+                    <ul style="list-style: none;">
+                        <li style="padding: 5px 0;">• Funciona igual en Windows, Linux y macOS</li>
+                        <li style="padding: 5px 0;">• No necesitas instalar el software en tu sistema</li>
+                        <li style="padding: 5px 0;">• Puedes tener múltiples versiones del mismo software sin conflictos</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Why use Docker for databases -->
+        <div class="slide">
+            <h1>¿Por qué usar Docker para bases de datos?</h1>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px;">
+                <div>
+                    <h2 style="color: #dc3545;">Problemas comunes sin Docker:</h2>
+                    <div style="background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%); color: white; padding: 30px; border-radius: 15px; margin-top: 20px;">
+                        <ul style="list-style: none;">
+                            <li style="padding: 8px 0;">• Instalaciones manuales extensas</li>
+                            <li style="padding: 8px 0;">• Errores por versiones incompatibles</li>
+                            <li style="padding: 8px 0;">• Dificultad para replicar entornos</li>
+                            <li style="padding: 8px 0;">• Riesgo de romper configuraciones previas</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <h2 style="color: #28a745;">Ventajas de usar Docker:</h2>
+                    <div style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); color: white; padding: 30px; border-radius: 15px; margin-top: 20px;">
+                        <ul style="list-style: none;">
+                            <li style="padding: 8px 0;">• Instalar PostgreSQL con una línea</li>
+                            <li style="padding: 8px 0;">• Puedes borrar y volver a empezar</li>
+                            <li style="padding: 8px 0;">• Todos tienen el mismo entorno</li>
+                            <li style="padding: 8px 0;">• Múltiples motores sin conflictos</li>
+                            <li style="padding: 8px 0;">• Ideal para pruebas y desarrollo</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 16: Docker Compose -->
+        <div class="slide">
+            <h1>Docker Compose</h1>
+            <div style="text-align: center; margin: 40px 0; background: #f8f9fa; padding: 30px; border-radius: 15px;">
+                <p style="font-size: 1.2rem; color: #666; max-width: 900px; margin: 0 auto;">
+                    Docker Compose es una herramienta que permite <strong>definir y correr múltiples contenedores</strong> de forma organizada, usando un solo archivo de configuración (<code style="background: #e9ecef; padding: 4px 8px; border-radius: 4px;">docker-compose.yml</code>).
+                </p>
+            </div>
+            
+            <div class="performance-table">
+                <div class="table-header">Comparación: docker run vs docker-compose</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid #eee;">
+                    <div style="padding: 20px; text-align: center; background: #fff3cd; font-weight: bold;">docker run</div>
+                    <div style="padding: 20px; text-align: center; background: #d1ecf1; font-weight: bold;">docker-compose</div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid #eee;">
+                    <div style="padding: 20px; text-align: center; background: white;">Línea de comando</div>
+                    <div style="padding: 20px; text-align: center; background: white;">Archivo YAML</div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid #eee;">
+                    <div style="padding: 20px; text-align: center; background: white;">Manual, uno a uno</div>
+                    <div style="padding: 20px; text-align: center; background: white;">Sí, definidos juntos</div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid #eee;">
+                    <div style="padding: 20px; text-align: center; background: white;">Difícil de mantener</div>
+                    <div style="padding: 20px; text-align: center; background: white;"><span class="performance-icon excellent">✅</span> Fácil de compartir y versionar</div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr;">
+                    <div style="padding: 20px; text-align: center; background: white;">Necesitas escribir todos los flags cada vez</div>
+                    <div style="padding: 20px; text-align: center; background: white;">Todo está documentado y reutilizable</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 17: Practice Time -->
+        <div class="slide">
+            <div style="text-align: center; padding: 100px 0;">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 60px; border-radius: 25px; display: inline-block;">
+                    <h1 style="color: white; font-size: 3rem; margin-bottom: 30px;">Vamos a la Práctica</h1>
+                    <div style="font-size: 1.5rem; margin-bottom: 30px;">🚀 ¡Es hora de crear tu primera base de datos!</div>
+                    <a href="https://github.com/juliangarzon/gestion_bd" 
+                       target="_blank"
+                       style="display: inline-block; background: rgba(255, 255, 255, 0.2); color: white; padding: 20px 40px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 1.2rem; transition: transform 0.3s ease;"
+                       onmouseover="this.style.transform='scale(1.05)'"
+                       onmouseout="this.style.transform='scale(1)'">
+                        📚 https://github.com/juliangarzon/gestion_bd
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18: Summary -->
+        <div class="slide">
+            <h1>¿Qué aprendimos hoy?</h1>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 40px 0;">
+                <div>
+                    <h2>🧠 Hoy aprendimos:</h2>
+                    <div style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); color: white; padding: 25px; border-radius: 15px; margin-top: 20px;">
+                        <ul style="list-style: none;">
+                            <li style="padding: 6px 0;">• Qué es una base de datos y por qué es fundamental</li>
+                            <li style="padding: 6px 0;">• Diferentes tipos de usuarios y niveles de abstracción</li>
+                            <li style="padding: 6px 0;">• Diferencias entre OLTP, OLAP y NoSQL</li>
+                            <li style="padding: 6px 0;">• Qué es Docker y por qué es útil para BD</li>
+                            <li style="padding: 6px 0;">• Diferencia entre docker run y docker-compose</li>
+                            <li style="padding: 6px 0;">• Crear e instalar BD usando docker</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <h2>📚 Recursos:</h2>
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 15px; margin-top: 20px;">
+                        <ul style="list-style: none;">
+                            <li style="padding: 5px 0;">• <a href="#" style="color: #a8edea;">¿Qué es una base de datos?</a></li>
+                            <li style="padding: 5px 0;">• <a href="#" style="color: #a8edea;">Tipos de bases de datos</a></li>
+                        </ul>
+                        <p style="margin-top: 20px;"><strong>Piensa el proyecto integrador:</strong></p>
+                        <ul style="list-style: none; margin-top: 10px;">
+                            <li>• ¿Qué sistema quieres hacer?</li>
+                            <li>• Elabora el diseño de tu BD tentativo</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="https://github.com/juliangarzon/gestion_bd" 
+                   target="_blank"
+                   style="display: inline-block; background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%); color: white; padding: 20px 40px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 1.2rem; transition: transform 0.3s ease;"
+                   onmouseover="this.style.transform='scale(1.05)'"
+                   onmouseout="this.style.transform='scale(1)'">
+                    🔗 Repositorio del curso en GitHub
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        
+        function showSlide(n) {
+            slides.forEach(slide => slide.style.display = 'none');
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].style.display = 'flex';
+            
+            // Add animation
+            slides[currentSlide].style.animation = 'fadeInUp 0.6s ease-out';
+        }
+        
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+        
+        function previousSlide() {
+            showSlide(currentSlide - 1);  
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                previousSlide();
+            }
+        });
+        
+        // Initialize
+        showSlide(0);
+        
+        // Auto-animate elements when they come into view
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.8s ease-out';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all cards and elements
+        document.querySelectorAll('.profile-card, .objective-item, .feature-card, .user-card, .level-card, .db-type-card').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
